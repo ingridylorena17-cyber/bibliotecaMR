@@ -1,0 +1,281 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Biblioteca Maria de Castro Ribeiro</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, sans-serif;
+}
+
+body{
+    background:#f4f4f4;
+    padding:10px;
+}
+
+.container{
+    max-width:1200px;
+    margin:auto;
+    background:white;
+    padding:15px;
+    border-radius:15px;
+    box-shadow:0 0 10px rgba(0,0,0,0.1);
+}
+
+.logo{
+    text-align:center;
+}
+
+.logo img{
+    width:120px;
+    max-width:100%;
+    height:auto;
+    margin-bottom:10px;
+}
+
+h1{
+    text-align:center;
+    color:#0b7a2f;
+    font-size:28px;
+}
+
+.subtitulo{
+    text-align:center;
+    color:#555;
+    margin:10px 0 20px;
+}
+
+hr{
+    border:2px solid #0b7a2f;
+    margin-bottom:20px;
+}
+
+.formulario{
+    border:1px solid #ddd;
+    padding:15px;
+    border-radius:10px;
+    margin-bottom:20px;
+}
+
+.formulario h2{
+    color:#0b7a2f;
+    margin-bottom:15px;
+}
+
+.campos{
+    display:grid;
+    grid-template-columns:1fr;
+    gap:10px;
+}
+
+input{
+    padding:12px;
+    border:1px solid #ccc;
+    border-radius:5px;
+    width:100%;
+}
+
+button{
+    background:#0b7a2f;
+    color:white;
+    border:none;
+    padding:12px;
+    border-radius:5px;
+    cursor:pointer;
+    font-size:16px;
+}
+
+button:hover{
+    background:#086325;
+}
+
+.tabela{
+    overflow-x:auto;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    min-width:600px;
+}
+
+th{
+    background:#0b7a2f;
+    color:white;
+    padding:10px;
+}
+
+td{
+    border:1px solid #ddd;
+    padding:10px;
+    text-align:center;
+}
+
+.emdia{
+    background:#d4edda;
+    color:#155724;
+    padding:5px 10px;
+    border-radius:5px;
+}
+
+.atrasado{
+    background:#f8d7da;
+    color:#721c24;
+    padding:5px 10px;
+    border-radius:5px;
+}
+
+.aviso{
+    margin-top:20px;
+    background:#fff8e1;
+    border:1px solid #ffd54f;
+    padding:15px;
+    border-radius:10px;
+}
+
+footer{
+    margin-top:20px;
+    background:#0b7a2f;
+    color:white;
+    text-align:center;
+    padding:15px;
+    border-radius:10px;
+}
+
+.whatsapp{
+    background:#25D366;
+    color:white;
+    text-decoration:none;
+    padding:8px 12px;
+    border-radius:5px;
+    display:inline-block;
+}
+
+@media(min-width:768px){
+    .campos{
+        grid-template-columns:repeat(5,1fr);
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="logo">
+<img src="https://uploads.onecompiler.io/44sh88c69/1781656068285/WhatsApp%20Image%202026-06-16%20at%2021.23.09.jpeg" alt="Logo da Escola">
+
+
+</div>
+
+<h1>📚 Biblioteca Maria de Castro Ribeiro</h1>
+<p class="subtitulo">Controle de Empréstimos de Livros</p>
+
+<hr>
+
+<div class="formulario">
+<h2>Registrar Empréstimo</h2>
+
+<form id="formulario">
+<div class="campos">
+
+<input type="text" id="nome" placeholder="Nome do aluno" required>
+
+<input type="tel" id="telefone" placeholder="WhatsApp (5599999999999)" required>
+
+<input type="text" id="livro" placeholder="Nome do livro" required>
+
+<input type="number" id="dias" placeholder="Dias de atraso" required>
+
+<button type="submit">Registrar</button>
+
+</div>
+</form>
+</div>
+
+<h2 style="color:#0b7a2f;margin-bottom:10px;">
+📚 Empréstimos Registrados
+</h2>
+
+<div class="tabela">
+<table>
+<thead>
+<tr>
+<th>Aluno</th>
+<th>Livro</th>
+<th>Dias</th>
+<th>Status</th>
+<th>Ação</th>
+</tr>
+</thead>
+
+<tbody id="lista"></tbody>
+</table>
+</div>
+
+<div class="aviso">
+⚠ Alunos com 7 dias ou mais de atraso receberão aviso pelo WhatsApp.
+</div>
+
+<footer>
+Biblioteca Maria de Castro Ribeiro<br>
+Incentivando a leitura e o conhecimento.
+</footer>
+
+</div>
+
+<script>
+const formulario = document.getElementById("formulario");
+const lista = document.getElementById("lista");
+
+formulario.addEventListener("submit", function(e){
+
+e.preventDefault();
+
+const nome = document.getElementById("nome").value;
+const telefone = document.getElementById("telefone").value;
+const livro = document.getElementById("livro").value;
+const dias = Number(document.getElementById("dias").value);
+
+let status = '<span class="emdia">Em dia</span>';
+let acao = 'Nenhuma';
+
+if(dias >= 7){
+
+status = '<span class="atrasado">⚠️ Atrasado</span>';
+
+const mensagem =
+`Olá ${nome}! A Biblioteca Maria de Castro Ribeiro informa que o livro "${livro}" está com ${dias} dias de atraso. Por favor, realize a devolução o quanto antes.`;
+
+const link =
+`https://wa.me/${telefone}?text=${encodeURIComponent(mensagem)}`;
+
+acao =
+`<a class="whatsapp" href="${link}" target="_blank">Enviar Aviso</a>`;
+}
+
+lista.innerHTML += `
+<tr>
+<td>${nome}</td>
+<td>${livro}</td>
+<td>${dias}</td>
+<td>${status}</td>
+<td>${acao}</td>
+</tr>
+`;
+
+formulario.reset();
+
+});
+</script>
+
+</body>
+</html>
+```
